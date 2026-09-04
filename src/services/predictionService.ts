@@ -44,14 +44,14 @@ function riskFor(p: number): PredictionResult["risk"] {
 function stagesFor(horizon: number): AttackStage[] {
   const currentIndex = 0;
   const predictedIndex = horizon >= 10 ? 2 : 1;
-  const confidences = [0.94, 0.76, 0.41, 0.22, 0.11];
+  const confidences: number[] = [0.94, 0.76, 0.41, 0.22, 0.11];
 
   return STAGE_META.map((stage, i) => {
     let status: StageStatus = "future";
     if (i < currentIndex) status = "completed";
     else if (i === currentIndex) status = "current";
     else if (i <= predictedIndex) status = "predicted";
-    return { ...stage, confidence: confidences[i], status };
+    return { ...stage, confidence: confidences[i] ?? 0, status };
   });
 }
 
@@ -64,12 +64,12 @@ export const predictionService = {
     return predictionService.getPrediction(horizon);
   },
   getPrediction(horizon: number): PredictionResult {
-    const curve = CURVES[horizon] ?? CURVES[5];
+    const curve: number[] = CURVES[horizon] ?? CURVES[5] ?? [];
     const timeline = curve.map((probability, i) => ({
       window: i === 0 ? "t (now)" : `t+${i}`,
       probability: Math.round(probability * 100),
     }));
-    const peak = curve[curve.length - 1];
+    const peak = curve[curve.length - 1] ?? 0;
     const stages = stagesFor(horizon);
 
     return {
