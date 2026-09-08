@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BenchmarkingRouteImport } from './routes/benchmarking'
+import { Route as ExplainabilityRouteImport } from './routes/explainability'
+import { Route as FeaturesRouteImport } from './routes/features'
+import { Route as PredictionRouteImport } from './routes/prediction'
+import { Route as TrafficRouteImport } from './routes/traffic'
+import { Route as WorldModelRouteImport } from './routes/world-model'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BenchmarkingRoute = BenchmarkingRouteImport.update({
+  id: '/benchmarking',
+  path: '/benchmarking',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExplainabilityRoute = ExplainabilityRouteImport.update({
+  id: '/explainability',
+  path: '/explainability',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FeaturesRoute = FeaturesRouteImport.update({
+  id: '/features',
+  path: '/features',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PredictionRoute = PredictionRouteImport.update({
+  id: '/prediction',
+  path: '/prediction',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TrafficRoute = TrafficRouteImport.update({
+  id: '/traffic',
+  path: '/traffic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WorldModelRoute = WorldModelRouteImport.update({
+  id: '/world-model',
+  path: '/world-model',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/benchmarking': typeof BenchmarkingRoute
+  '/explainability': typeof ExplainabilityRoute
+  '/features': typeof FeaturesRoute
+  '/prediction': typeof PredictionRoute
+  '/traffic': typeof TrafficRoute
+  '/world-model': typeof WorldModelRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/benchmarking': typeof BenchmarkingRoute
+  '/explainability': typeof ExplainabilityRoute
+  '/features': typeof FeaturesRoute
+  '/prediction': typeof PredictionRoute
+  '/traffic': typeof TrafficRoute
+  '/world-model': typeof WorldModelRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/benchmarking': typeof BenchmarkingRoute
+  '/explainability': typeof ExplainabilityRoute
+  '/features': typeof FeaturesRoute
+  '/prediction': typeof PredictionRoute
+  '/traffic': typeof TrafficRoute
+  '/world-model': typeof WorldModelRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/benchmarking'
+    | '/explainability'
+    | '/features'
+    | '/prediction'
+    | '/traffic'
+    | '/world-model'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/benchmarking'
+    | '/explainability'
+    | '/features'
+    | '/prediction'
+    | '/traffic'
+    | '/world-model'
+  id:
+    | '__root__'
+    | '/'
+    | '/benchmarking'
+    | '/explainability'
+    | '/features'
+    | '/prediction'
+    | '/traffic'
+    | '/world-model'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BenchmarkingRoute: typeof BenchmarkingRoute
+  ExplainabilityRoute: typeof ExplainabilityRoute
+  FeaturesRoute: typeof FeaturesRoute
+  PredictionRoute: typeof PredictionRoute
+  TrafficRoute: typeof TrafficRoute
+  WorldModelRoute: typeof WorldModelRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/benchmarking': {
+      id: '/benchmarking'
+      path: '/benchmarking'
+      fullPath: '/benchmarking'
+      preLoaderRoute: typeof BenchmarkingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/explainability': {
+      id: '/explainability'
+      path: '/explainability'
+      fullPath: '/explainability'
+      preLoaderRoute: typeof ExplainabilityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/features': {
+      id: '/features'
+      path: '/features'
+      fullPath: '/features'
+      preLoaderRoute: typeof FeaturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prediction': {
+      id: '/prediction'
+      path: '/prediction'
+      fullPath: '/prediction'
+      preLoaderRoute: typeof PredictionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/traffic': {
+      id: '/traffic'
+      path: '/traffic'
+      fullPath: '/traffic'
+      preLoaderRoute: typeof TrafficRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/world-model': {
+      id: '/world-model'
+      path: '/world-model'
+      fullPath: '/world-model'
+      preLoaderRoute: typeof WorldModelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BenchmarkingRoute: BenchmarkingRoute,
+  ExplainabilityRoute: ExplainabilityRoute,
+  FeaturesRoute: FeaturesRoute,
+  PredictionRoute: PredictionRoute,
+  TrafficRoute: TrafficRoute,
+  WorldModelRoute: WorldModelRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
