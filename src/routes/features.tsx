@@ -1,10 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Layers, Network, Package, Workflow } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
+import { DatasetLoader } from "@/components/ui-kit/DatasetLoader";
 import { FeatureTable } from "@/components/ui-kit/FeatureTable";
 import { NetworkGraph } from "@/components/ui-kit/NetworkGraph";
 import { PipelineStep } from "@/components/ui-kit/PipelineStep";
 import { SectionCard } from "@/components/ui-kit/SectionCard";
+import { StatusBadge } from "@/components/ui-kit/StatusBadge";
+import { buildFeatureSamples } from "@/lib/datasets/parseDataset";
+import { useDatasetState } from "@/lib/datasets/datasetStore";
 import { featureService } from "@/services/featureService";
 
 export const Route = createFileRoute("/features")({
@@ -27,26 +31,36 @@ export const Route = createFileRoute("/features")({
 });
 
 function FeaturesPage() {
+  const { dataset } = useDatasetState();
   const pipeline = featureService.getPreprocessingPipeline();
-  const state = featureService.getStateVector();
-  const { nodes, edges } = featureService.getGraph();
+  const state = dataset?.stateVector ?? featureService.getStateVector();
+  const samples = dataset ? buildFeatureSamples(dataset) : null;
+  const graph = dataset ? dataset.graph : featureService.getGraph();
+  const { nodes, edges } = graph;
 
   return (
     <AppShell
       title="Feature Extraction"
       subtitle="Which features are extracted, and how network state is represented"
       icon={<Layers className="size-5" />}
+      actions={
+        <StatusBadge tone={dataset ? "success" : "demo"}>
+          {dataset ? "Computed from loaded capture" : "Demo data"}
+        </StatusBadge>
+      }
     >
+      <DatasetLoader />
+
       <div className="grid gap-4 xl:grid-cols-2">
         <FeatureTable
           title="Flow-level features"
           icon={<Workflow className="size-4" />}
-          features={featureService.getFlowFeatures()}
+          features={samples?.flow ?? featureService.getFlowFeatures()}
         />
         <FeatureTable
           title="Packet-level features"
           icon={<Package className="size-4" />}
-          features={featureService.getPacketFeatures()}
+          features={samples?.packet ?? featureService.getPacketFeatures()}
         />
       </div>
 
