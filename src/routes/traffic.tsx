@@ -12,9 +12,12 @@ import {
 } from "recharts";
 import { AppShell } from "@/components/layout/AppShell";
 import { DatasetCard } from "@/components/ui-kit/DatasetCard";
+import { DatasetLoader } from "@/components/ui-kit/DatasetLoader";
 import { MetricCard } from "@/components/ui-kit/MetricCard";
 import { SectionCard } from "@/components/ui-kit/SectionCard";
+import { StatusBadge } from "@/components/ui-kit/StatusBadge";
 import { TrafficTable } from "@/components/ui-kit/TrafficTable";
+import { useDatasetState } from "@/lib/datasets/datasetStore";
 import { trafficService } from "@/services/trafficService";
 
 export const Route = createFileRoute("/traffic")({
@@ -36,9 +39,11 @@ export const Route = createFileRoute("/traffic")({
 });
 
 function TrafficPage() {
-  const summary = trafficService.getSummary();
-  const flows = trafficService.getFlows();
-  const throughput = trafficService.getThroughput();
+  const { dataset } = useDatasetState();
+  const summary = dataset?.summary ?? trafficService.getSummary();
+  const allFlows = dataset?.flows ?? trafficService.getFlows();
+  const flows = allFlows.slice(0, 60);
+  const throughput = dataset?.throughput ?? trafficService.getThroughput();
   const datasets = trafficService.getDatasets();
 
   return (
@@ -46,7 +51,14 @@ function TrafficPage() {
       title="Traffic Analysis"
       subtitle="What network data is captured and how it is read"
       icon={<Activity className="size-5" />}
+      actions={
+        <StatusBadge tone={dataset ? "success" : "demo"}>
+          {dataset ? "Real capture loaded" : "Demo data"}
+        </StatusBadge>
+      }
     >
+      <DatasetLoader />
+
       <SectionCard
         title="Capture source"
         description="Traffic is read from packet captures or flow exports"
