@@ -107,7 +107,15 @@ function TrafficPage() {
         </ResponsiveContainer>
       </SectionCard>
 
-      <SectionCard title="Parsed flow records" description="Layer 2–4 headers reassembled by 5-tuple" bodyClassName="p-0">
+      <SectionCard
+        title="Parsed flow records"
+        description={
+          dataset
+            ? `Showing ${flows.length} of ${allFlows.length.toLocaleString()} parsed flows from ${dataset.fileName}`
+            : "Layer 2–4 headers reassembled by 5-tuple"
+        }
+        bodyClassName="p-0"
+      >
         <TrafficTable flows={flows} />
       </SectionCard>
 
